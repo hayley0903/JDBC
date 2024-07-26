@@ -84,12 +84,8 @@ public class jdbc_test {
 			catch(SQLException e) {
 				e.printStackTrace();
 			}
-		  }
 		}
-
-
-
-
-
 	}
+
+}
 
