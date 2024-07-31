@@ -132,6 +132,7 @@ public class MemberServiceImpl implements MemberService {
 			System.out.print(memberList.get(i).get("member_birth")+"\t");
 			System.out.print(memberList.get(i).get("member_email")+"\t");
 			System.out.println(memberList.get(i).get("member_phone")+"\t");
+			
 		}
 		
 	}
