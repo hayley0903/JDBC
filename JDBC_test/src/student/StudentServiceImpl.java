@@ -268,8 +268,6 @@ public class StudentServiceImpl implements StudentService{
 		int choice = sc.nextInt();
 		int scoreIdx = Integer.parseInt(studentList.get(choice-1).get("score_idx").toString());
 
-
-
 		System.out.println("수정할 점수를 입력해주세요>>>");
 		int updateScore = sc.nextInt();
 
