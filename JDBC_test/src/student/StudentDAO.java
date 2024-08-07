@@ -300,7 +300,7 @@ public class StudentDAO {
 		}
 		
 		// 학생이름으로 학생 성적 조회
-				public List<HashMap<String, Object>> printSearchScore(String studentName){
+				public List<HashMap<String, Object>> printSearchScore(int studentIdx){
 					List<HashMap<String, Object>> studentList = new ArrayList();
 					try {
 						Class.forName(driver);
@@ -317,22 +317,22 @@ public class StudentDAO {
 					}
 
 					try {
-						String sql = "select T1.score_season,\n"
+						String sql = "select \n"
+								+ "T2.student_name,\n"
+								+ "T1.student_idx,\n"
+								+ "T1.score_season,\n"
 								+ "T1.score_semester,\n"
 								+ "T1.score_exam_type,\n"
 								+ "T1.score_subject,\n"
-								+ "T1.score_point,\n"
-								+ "T1.score_idx,\n"
-								+ "T1.student_idx,\n"
-								+ "T2.student_name\n"
+								+ "T1.score_point\n"
 								+ "from tb_student_score T1\n"
 								+ "inner join tb_student_info T2\n"
 								+ "on T1.student_idx = T2.student_idx\n"
-								+ "where T2.student_name = ?;";
+								+ "where T2.student_idx = ?;";
 
 
 						pstmt = conn.prepareStatement(sql);
-						pstmt.setString(1, studentName);
+						pstmt.setInt(1, studentIdx);
 
 						rs = pstmt.executeQuery();
 
@@ -340,14 +340,13 @@ public class StudentDAO {
 						while(rs.next()) {
 						
 							HashMap<String, Object> rsMap = new HashMap<String, Object>();
+							rsMap.put("student_name", rs.getString("T2.student_name"));
+							rsMap.put("student_idx", rs.getInt("T1.student_idx"));
 							rsMap.put("score_season", rs.getInt("T1.score_season"));
 							rsMap.put("score_semester", rs.getString("T1.score_semester"));
 							rsMap.put("score_exam_type", rs.getString("T1.score_exam_type"));
 							rsMap.put("score_subject", rs.getString("T1.score_subject"));
 							rsMap.put("score_point", rs.getInt("T1.score_point"));
-							rsMap.put("score_idx", rs.getInt("T1.score_idx"));
-							rsMap.put("student_idx", rs.getInt("T1.student_idx"));
-							rsMap.put("student_name", rs.getString("T2.student_name"));
 
 							studentList.add(rsMap);
 						}
@@ -700,11 +699,21 @@ public class StudentDAO {
 		}
 
 		try {
-			String sql = "";
+			String sql = "delete from tb_student_score \n"
+					+ "where score_season = ?\n"
+					+ "and score_semester = ?\n"
+					+ "and score_exam_type = ?\n"
+					+ "and score_subject = ?\n"
+					+ "and student_idx = ?;";
 
 			pstmt = conn.prepareStatement(sql);
 
-
+			pstmt.setString(1, paramMap.get("season").toString());
+			pstmt.setInt(2, Integer.parseInt(paramMap.get("semester").toString()));
+			pstmt.setString(3, paramMap.get("examType").toString());
+			pstmt.setString(4, paramMap.get("subject").toString());
+			pstmt.setInt(5, Integer.parseInt(paramMap.get("studentIdx").toString()));
+			
 
 			resultChk = pstmt.executeUpdate();
 
